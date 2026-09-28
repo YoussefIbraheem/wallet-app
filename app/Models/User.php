@@ -26,7 +26,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(["name", "email", "password"])]
+#[Fillable(["first_name", "last_name", "email", "password"])]
 #[
     Hidden([
         "password",
