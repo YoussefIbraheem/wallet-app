@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Exceptions\RoleAlreadyExists;
 use Spatie\Permission\Models\Role;
 
-class UserRoleSeeder extends Seeder
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,7 +15,7 @@ class UserRoleSeeder extends Seeder
         $roles = ["admin", "user", "moderator"];
 
         foreach ($roles as $role) {
-            $role_exists = Role::where("name", $role)->exists();
+            $role_exists = Role::query()->where("name", $role)->exists();
             if ($role_exists) {
                 continue;
             }

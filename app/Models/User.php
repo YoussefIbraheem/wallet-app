@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -12,8 +11,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
+use App\Enums\Role as RoleEnum;
 
 /**
+ * @method bool isAdmin()
  * @property int $id
  * @property string $name
  * @property string $email
@@ -37,7 +38,6 @@ use Spatie\Permission\Traits\HasRoles;
 ]
 class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory;
     use Notifiable;
     use HasRoles;
@@ -65,5 +65,32 @@ class User extends Authenticatable implements MustVerifyEmail
         return Str::length($initials) > 1
             ? Str::substr($initials, 0, 1) . Str::substr($initials, -1)
             : $initials;
+    }
+
+    /**
+     * Check if the user is admin
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(RoleEnum::ADMIN);
+    }
+
+    /**
+     * Check if the user is a regular user
+     * @return bool
+     */
+    public function isUser(): bool
+    {
+        return $this->hasRole(RoleEnum::USER);
+    }
+
+    /**
+     * Check if the user is a moderator
+     * @return bool
+     */
+    public function isModerator(): bool
+    {
+        return $this->hasRole(RoleEnum::MODERATOR);
     }
 }
