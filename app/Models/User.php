@@ -14,9 +14,12 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use App\Enums\Role as RoleEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Filament\Panel;
 
 /**
  * @method bool isAdmin()
+ * @method bool isUser()
+ * @method bool isModerator()
  * @property int $id
  * @property string|null $first_name
  * @property string|null $last_name
@@ -83,6 +86,11 @@ class User extends Authenticatable implements MustVerifyEmail, HasName
     public function getFilamentName(): string
     {
         return $this->name;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->isAdmin() || $this->isModerator();
     }
 
     /**
