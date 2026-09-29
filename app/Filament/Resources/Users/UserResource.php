@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users;
 
+use App\Enums\Role;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
@@ -50,10 +51,15 @@ class UserResource extends Resource
         ];
     }
 
-
     #[Override]
     public static function canEdit(Model $record): bool
     {
         return $record->id == auth()->user()->id;
+    }
+
+    #[Override]
+    public static function canView(Model $record): bool
+    {
+        return $record->isAdmin();
     }
 }

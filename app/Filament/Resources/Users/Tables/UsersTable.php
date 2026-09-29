@@ -70,7 +70,7 @@ class UsersTable
                 ViewAction::make(),
                 ActionGroup::make([
                     Action::make("update_role")
-                        ->visible(fn($record)=> auth()->user()->hasRole(Role::ADMIN) && $record->id != auth()->user()->id)
+                        ->visible(fn($record)=> auth()->user()->isAdmin() && $record->id != auth()->user()->id)
                         ->schema([
                             Select::make("new_role")->options(Role::class),
                         ])
