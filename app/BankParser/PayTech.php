@@ -9,11 +9,6 @@ class PayTech implements BankParser
         return "paytech";
     }
 
-    public function referenceDelimiter(): string
-    {
-        return "#";
-    }
-
     public function parse(string $body): array
     {
         //
@@ -81,7 +76,7 @@ class PayTech implements BankParser
      */
     private function extractReference(string $transaction): string
     {
-        $delimiter = $this->referenceDelimiter();
+        $delimiter = "#";
 
         $refStart = strpos($transaction, $delimiter);
         if ($refStart === false) {
