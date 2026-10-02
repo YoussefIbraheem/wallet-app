@@ -24,6 +24,7 @@ class TransactionFactory extends Factory
 
     public function bank(string $bankName): static
     {
+        $webhook_id = fake()->uuid();
         $fakeDate = fake()->date("Ymd");
         $fakeAmount = fake()->randomFloat(2, 0, 999);
         $fakeReference = $fakeDate . fake()->randomNumber(7, true);
@@ -43,7 +44,10 @@ class TransactionFactory extends Factory
 
         return $this->state(
             fn($attributes) => [
-                "transaction" => $format,
+                "webhook_id" => $webhook_id,
+                "referenece" => $fakeReference,
+                "raw_line" => $format,
+                "raw_line_hashed" => hash("sha256", $format),
             ],
         );
     }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\BankParser\BankParserRegistry;
 use App\Models\Transaction;
+use Ramsey\Uuid\Uuid;
 
 class BankResponseHandler
 {
@@ -17,9 +18,18 @@ class BankResponseHandler
         $parser = $this->parsers->get($bankName);
 
         $data = $parser->process($body);
-
-        foreach ($data as $trans) {
-            Transaction::query()->create(["transaction" => $trans]);
+        $webhook_id = Uuid::uuid4();
+        foreach ($data as $ref => $trans) {
+            $rawLineHashed = hash("sha256", $trans);
+            if (Transaction::where("raw_line_hashed", $rawLineHashed)->exists()) {
+                continue;
+            }
+            Transaction::query()->create([
+                "webhook_id" => $webhook_id,
+                "reference" => $ref,
+                "raw_line" => $trans,
+                "raw_line_hashed" => $rawLineHashed,
+            ]);
         }
 
         return $data;
