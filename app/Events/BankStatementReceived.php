@@ -19,7 +19,7 @@ class BankStatementReceived
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $body, public string $bankName)
+    public function __construct(public string $body)
     {
         //
     }

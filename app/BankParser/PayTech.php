@@ -2,6 +2,8 @@
 
 namespace App\BankParser;
 
+use DateTime;
+
 class PayTech implements BankParser
 {
     public function name(): string
@@ -9,62 +11,37 @@ class PayTech implements BankParser
         return "paytech";
     }
 
-    public function parse(string $body): array
+    public function parse(string $rawLine): array
     {
-        //
+        [$dateAndAmount, $reference, $notes] = explode("#", $rawLine, 3);
+
+        return [
+            "date" => $this->extractDate($dateAndAmount),
+            "amount" => $this->extractAmount($dateAndAmount),
+            "reference" => $reference,
+            "notes" => $this->extractNotes($notes),
+        ];
     }
 
-    /**
-     * Breaksdown the transactions into unique transactions and store them in the database.
-     *
-     * @param string $body
-     * @return array
-     *
-     */
-    public function process(string $body): array
+    private function extractDate(string $dateAndAmount): string
     {
-        $dataArrUnique = $this->convertToUniqueArray($body);
+        $date = substr($dateAndAmount, 0, 8);
 
-        return $dataArrUnique;
+        return DateTime::createFromFormat("Ymd", $date)->format("Y-m-d");
     }
 
-    /**
-     * convert data to unique array
-     *
-     * @param string $body
-     * @return array
-     *
-     */
-    private function convertToUniqueArray(string $body): array
+    private function extractAmount(string $dateAndAmount): float
     {
-        $cleanBody =
-            preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $body) ?:
-            $body;
-        $dataArr = explode("\n", $cleanBody);
-        $dataArrUnique = $this->removeDuplicates($dataArr);
-
-        return $dataArrUnique;
+        return (float) substr($dateAndAmount, 8);
     }
 
-    /**
-     * Remove Duplicate transactions
-     *
-     * @param array $dataArr
-     * @return array
-     *
-     */
-    private function removeDuplicates(array $dataArr): array
+    private function extractNotes(string $notes): array
     {
-        $refArr = [];
+        $notes = str_replace("/", "=", $notes);
 
-        foreach ($dataArr as $trans) {
-            $ref = $this->extractReference($trans);
-            if (!array_key_exists($ref, $refArr)) {
-                $refArr[$ref] = $trans;
-            }
-        }
+        parse_str($notes, $parsedNotes);
 
-        return array_values($refArr);
+        return $parsedNotes;
     }
 
     /**

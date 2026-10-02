@@ -13,25 +13,43 @@ class BankResponseHandler
         //
     }
 
-    public function execute(string $body, string $bankName)
+    public function execute(string $body)
     {
-        $parser = $this->parsers->get($bankName);
-
-        $data = $parser->process($body);
+        $data = $this->convertToArray($body);
         $webhook_id = Uuid::uuid4();
-        foreach ($data as $ref => $trans) {
+        foreach ($data as $trans) {
             $rawLineHashed = hash("sha256", $trans);
-            if (Transaction::where("raw_line_hashed", $rawLineHashed)->exists()) {
+            if (
+                Transaction::where("raw_line_hashed", $rawLineHashed)->exists()
+            ) {
                 continue;
             }
             Transaction::query()->create([
                 "webhook_id" => $webhook_id,
-                "reference" => $ref,
                 "raw_line" => $trans,
                 "raw_line_hashed" => $rawLineHashed,
             ]);
         }
 
+        // TODO add the parsing event here
+
         return $data;
+    }
+
+    /**
+     * convert data to array
+     *
+     * @param string $body
+     * @return array
+     *
+     */
+    private function convertToArray(string $body): array
+    {
+        $cleanBody =
+            preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $body) ?:
+            $body;
+        $dataArr = explode("\n", $cleanBody);
+
+        return $dataArr;
     }
 }

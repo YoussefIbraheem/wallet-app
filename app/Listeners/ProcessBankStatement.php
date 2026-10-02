@@ -24,6 +24,6 @@ class ProcessBankStatement implements ShouldQueue
      */
     public function handle(BankStatementReceived $event): void
     {
-        $this->handler->execute($event->body, $event->bankName);
+        $this->handler->execute($event->body);
     }
 }

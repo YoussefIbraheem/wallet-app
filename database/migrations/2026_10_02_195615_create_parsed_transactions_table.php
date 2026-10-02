@@ -10,11 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create("transactions", function (Blueprint $table) {
+        Schema::create("parsed_transactions", function (Blueprint $table) {
             $table->id();
-            $table->uuid("webhook_id")->index();
-            $table->longText("raw_line");
-            $table->char("raw_line_hashed", 64)->unique();
+            $table->foreignId("transaction_id");
+            $table->string("reference");
+            $table->float("amount");
+            $table->dateTime("date");
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists("transactions");
+        Schema::dropIfExists("parsed_transactions");
     }
 };
