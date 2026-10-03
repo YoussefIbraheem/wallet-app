@@ -19,10 +19,6 @@ class TransactionParser
         $parser = $this->registery->get($bankName);
         $transactions = Transaction::query()->where("webhook_id", $webhook_id)->get();
         foreach ($transactions as $transaction) {
-            // if (!$parser->isTransactionFormatMatching($transaction)) {
-            //     $transaction->update(["status" => TransactionStatus::FAILED->value]);
-            //     continue;
-            // }
             $parsedTransaction = $parser->parse($transaction->raw_line);
             ParsedTransaction::query()->create([
                 "date" => $parsedTransaction["date"],
