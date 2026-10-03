@@ -4,13 +4,20 @@ namespace App\BankParser;
 
 use App\Models\ParsedTransaction;
 use DateTime;
+use Override;
 
-class PayTech implements BankParser, HasMetadata
+class PayTech implements BankParser, HasMetadata, HasMatchingFormat
 {
 
     public function name(): string
     {
         return "paytech";
+    }
+
+    #[Override]
+    public function isMatchingFormat(string $rawLine): bool
+    {
+        return (bool) preg_match("/^\d{8}\d+,\d{2}#[^#]+#[^\/#]+\/[^\/#]+(?:\/[^\/#]+\/[^\/#]+)*$/", $rawLine);
     }
 
     public function parse(string $rawLine): array
@@ -28,7 +35,7 @@ class PayTech implements BankParser, HasMetadata
     public function storeMetadata(ParsedTransaction $transaction, array $parsedData): void
     {
         $transaction->transactionMetadata()->createMany(
-            array_map(fn ($key, $value) => [
+            array_map(fn($key, $value) => [
                 "key" => $key,
                 "value" => $value,
             ], array_keys($parsedData["metadata"]), array_values($parsedData["metadata"]))

@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use App\BankParser\BankParserRegistry;
+use App\BankParser\HasMatchingFormat;
 use App\BankParser\HasMetadata;
 use App\Enums\TransactionStatus;
 use App\Models\ParsedTransaction;
 use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TransactionParser
 {
@@ -20,7 +22,10 @@ class TransactionParser
         $parser = $this->registery->get($bankName);
         $transactions = Transaction::query()->where("webhook_id", $webhook_id)->get();
         foreach ($transactions as $transaction) {
-
+            if ($parser instanceof HasMatchingFormat && !$parser->isMatchingFormat($transaction->raw_line)) {
+                $transaction->update(["status" => TransactionStatus::FAILED->value]);
+                continue;
+            }
             $parsedTransaction = $parser->parse($transaction->raw_line);
             $parsedTransactionModel = ParsedTransaction::query()->create([
                 "date" => $parsedTransaction["date"],

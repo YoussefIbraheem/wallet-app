@@ -5,7 +5,7 @@ namespace App\BankParser;
 use DateTime;
 use Override;
 
-class Acme implements BankParser
+class Acme implements BankParser, HasMatchingFormat
 {
     #[Override]
     public function parse(string $rawLine): mixed
@@ -23,6 +23,12 @@ class Acme implements BankParser
     public function name(): string
     {
         return "acme";
+    }
+
+    #[Override]
+    public function isMatchingFormat(string $rawLine): bool
+    {
+        return preg_match("/^\d+,\d{2}\/\/[^\/]+\/\/\d{8}$/", $rawLine);
     }
 
     private function extractAmount(string $amount): float
