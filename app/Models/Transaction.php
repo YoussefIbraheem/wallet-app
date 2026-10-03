@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Override;
 
-#[Fillable("webhook_id", "raw_line", "raw_line_hashed")]
+#[Fillable("webhook_id", "bank_name", "raw_line", "raw_line_hashed", "status")]
 class Transaction extends Model
 {
     use HasFactory;

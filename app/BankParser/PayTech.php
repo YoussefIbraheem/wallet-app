@@ -3,6 +3,7 @@
 namespace App\BankParser;
 
 use DateTime;
+use Override;
 
 class PayTech implements BankParser
 {
@@ -32,7 +33,8 @@ class PayTech implements BankParser
 
     private function extractAmount(string $dateAndAmount): float
     {
-        return (float) substr($dateAndAmount, 8);
+        $strAmount = str_replace(",", ".", substr($dateAndAmount, 8));
+        return floatval($strAmount);
     }
 
     private function extractNotes(string $notes): array
@@ -42,31 +44,5 @@ class PayTech implements BankParser
         parse_str($notes, $parsedNotes);
 
         return $parsedNotes;
-    }
-
-    /**
-     * Extract reference depnding on given bank name
-     *
-     * @param string $transaction
-     * @return string
-     *
-     */
-    private function extractReference(string $transaction): string
-    {
-        $delimiter = "#";
-
-        $refStart = strpos($transaction, $delimiter);
-        if ($refStart === false) {
-            return "";
-        }
-
-        $refStart += strlen($delimiter);
-
-        $refEnd = strpos($transaction, $delimiter, $refStart);
-        if ($refEnd === false) {
-            return "";
-        }
-
-        return substr($transaction, $refStart, $refEnd - $refStart);
     }
 }

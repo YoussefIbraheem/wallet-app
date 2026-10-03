@@ -2,8 +2,7 @@
 
 namespace App\Services;
 
-use App\BankParser\BankParserRegistry;
-use App\Events\ParseBankStatement;
+use App\Events\TransactionParse;
 use App\Models\Transaction;
 use Ramsey\Uuid\Uuid;
 
@@ -27,12 +26,13 @@ class BankResponseHandler
             }
             Transaction::query()->create([
                 "webhook_id" => $webhook_id,
+                "bank_name" => $bankName,
                 "raw_line" => $trans,
                 "raw_line_hashed" => $rawLineHashed,
             ]);
         }
 
-        ParseBankStatement::dispatch($webhook_id, $bankName);
+        TransactionParse::dispatch($webhook_id, $bankName);
 
         return $data;
     }
