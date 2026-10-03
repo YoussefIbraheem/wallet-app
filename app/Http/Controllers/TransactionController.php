@@ -15,7 +15,7 @@ class TransactionController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function handleBankWebhook(Request $request, string $bank_name)
+    public function handleBankWebhook(Request $request, string $bankName)
     {
         try {
             $body = $request->getContent();
@@ -24,7 +24,7 @@ class TransactionController extends Controller
                 throw new \Exception("Empty data received");
             }
 
-            BankStatementReceived::dispatch($body, $bank_name);
+            BankStatementReceived::dispatch($body, $bankName);
 
             return response()->noContent();
         } catch (\Exception $e) {

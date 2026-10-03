@@ -3,17 +3,18 @@
 namespace App\Services;
 
 use App\BankParser\BankParserRegistry;
+use App\Events\ParseBankStatement;
 use App\Models\Transaction;
 use Ramsey\Uuid\Uuid;
 
 class BankResponseHandler
 {
-    public function __construct(private BankParserRegistry $parsers)
+    public function __construct()
     {
         //
     }
 
-    public function execute(string $body)
+    public function execute(string $body, string $bankName)
     {
         $data = $this->convertToArray($body);
         $webhook_id = Uuid::uuid4();
@@ -31,7 +32,7 @@ class BankResponseHandler
             ]);
         }
 
-        // TODO add the parsing event here
+        ParseBankStatement::dispatch($webhook_id, $bankName);
 
         return $data;
     }

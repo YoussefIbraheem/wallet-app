@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class BankStatementReceived
+class ParseBankStatement
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -19,7 +19,7 @@ class BankStatementReceived
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $body, public string $bankName)
+    public function __construct(public string $webhook_id, public string $bankName)
     {
         //
     }
