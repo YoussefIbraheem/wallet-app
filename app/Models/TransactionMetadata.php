@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 #[Fillable("parsed_transaction_id", "key", "value")]
 class TransactionMetadata extends Model
 {
@@ -15,4 +14,6 @@ class TransactionMetadata extends Model
     {
         return $this->belongsTo(ParsedTransaction::class);
     }
+
+    public $timestamps = false;
 }

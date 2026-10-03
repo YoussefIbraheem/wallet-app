@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\BankParser\BankParserRegistry;
+use App\BankParser\HasMetadata;
 use App\Enums\TransactionStatus;
 use App\Models\ParsedTransaction;
 use App\Models\Transaction;
@@ -19,13 +20,17 @@ class TransactionParser
         $parser = $this->registery->get($bankName);
         $transactions = Transaction::query()->where("webhook_id", $webhook_id)->get();
         foreach ($transactions as $transaction) {
+
             $parsedTransaction = $parser->parse($transaction->raw_line);
-            ParsedTransaction::query()->create([
+            $parsedTransactionModel = ParsedTransaction::query()->create([
                 "date" => $parsedTransaction["date"],
                 "amount" => $parsedTransaction["amount"],
                 "reference" => $parsedTransaction["reference"],
                 "transaction_id" => $transaction->id,
             ]);
+            if ($parser instanceof HasMetadata) {
+                $parser->storeMetadata($parsedTransactionModel, $parsedTransaction);
+            }
             $transaction->update(["status" => TransactionStatus::PROCESSED->value]);
         }
     }
