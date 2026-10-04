@@ -32,14 +32,13 @@ class PayTech implements BankParser, HasMetadata, HasMatchingFormat
         ];
     }
 
-    public function storeMetadata(ParsedTransaction $transaction, array $parsedData): void
+    public function parseMetadata($transaction_id,array $parsedData): array
     {
-        $transaction->transactionMetadata()->createMany(
-            array_map(fn($key, $value) => [
-                "key" => $key,
-                "value" => $value,
-            ], array_keys($parsedData["metadata"]), array_values($parsedData["metadata"]))
-        );
+        return array_map(fn($key, $value) => [
+            "key" => $key,
+            "value" => $value,
+            "transaction_id" => $transaction_id,
+        ], array_keys($parsedData["metadata"]), array_values($parsedData["metadata"]));
     }
 
     private function extractDate(string $dateAndAmount): string

@@ -8,6 +8,8 @@ use App\BankParser\HasMetadata;
 use App\Enums\TransactionStatus;
 use App\Models\ParsedTransaction;
 use App\Models\Transaction;
+use App\Models\TransactionMetadata;
+use Illuminate\Support\Facades\DB;
 
 class TransactionParser
 {
@@ -20,22 +22,38 @@ class TransactionParser
     {
         $parser = $this->registery->get($bankName);
         $transactions = Transaction::query()->where("webhook_id", $webhookId)->get();
+        $parsedTransactions = [];
+        $metadata = [];
         foreach ($transactions as $transaction) {
             if ($parser instanceof HasMatchingFormat && !$parser->isMatchingFormat($transaction->raw_line)) {
-                $transaction->update(["status" => TransactionStatus::FAILED->value]);
+                $transaction->status = TransactionStatus::FAILED->value;
                 continue;
             }
             $parsedTransaction = $parser->parse($transaction->raw_line);
-            $parsedTransactionModel = ParsedTransaction::query()->create([
+            $parsedTransactions[] = [
                 "date" => $parsedTransaction["date"],
                 "amount" => $parsedTransaction["amount"],
                 "reference" => $parsedTransaction["reference"],
                 "transaction_id" => $transaction->id,
-            ]);
+            ];
             if ($parser instanceof HasMetadata) {
-                $parser->storeMetadata($parsedTransactionModel, $parsedTransaction);
+                $metadata[] = $parser->parseMetadata($transaction->id, $parsedTransaction);
             }
-            $transaction->update(["status" => TransactionStatus::PROCESSED->value]);
+        }
+
+        $isParsed = ParsedTransaction::query()->insert($parsedTransactions);
+        if ($parser instanceof HasMetadata) {
+            $metadata = array_merge(...$metadata);
+            TransactionMetadata::query()->insert($metadata);
+        }
+
+        if ($isParsed) {
+            $transactions = Transaction::query()->where("webhook_id", $webhookId)->get()->each(function ($transaction) {
+                $transaction->status = TransactionStatus::PROCESSED->value;
+            })->toArray();
+
+            DB::table("transactions")->upsert($transactions, ["id"],["status"]);
+
         }
     }
 }

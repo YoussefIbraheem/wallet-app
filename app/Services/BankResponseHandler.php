@@ -17,20 +17,23 @@ class BankResponseHandler
     {
         $data = $this->convertToArray($body);
         $webhookId = Uuid::uuid4();
+        $transactions = [];
         foreach ($data as $trans) {
             $rawLineHashed = hash("sha256", $trans);
-            if (
-                Transaction::where("raw_line_hashed", $rawLineHashed)->exists()
-            ) {
+            if (Transaction::where("raw_line_hashed", $rawLineHashed)->exists() ) {
                 continue;
             }
-            Transaction::query()->create([
+            $transactions[$rawLineHashed] = [
                 "webhook_id" => $webhookId,
                 "bank_name" => $bankName,
                 "raw_line" => $trans,
                 "raw_line_hashed" => $rawLineHashed,
-            ]);
+            ];
         }
+
+        $transactions = $this->removeDuplicates($transactions);
+
+        Transaction::query()->insert($transactions);
 
         TransactionParse::dispatch($webhookId, $bankName);
 
@@ -53,4 +56,20 @@ class BankResponseHandler
 
         return $dataArr;
     }
+
+    private function removeDuplicates(array $transactions): array
+    {
+        $uniqueArr = [];
+
+        foreach ($transactions as $trans) {
+            $ref = $trans["raw_line_hashed"];
+            if (!array_key_exists($ref, $uniqueArr)) {
+                $uniqueArr[$ref] = $trans;
+            }
+        }
+
+        return array_values($uniqueArr);
+    }
+
+
 }

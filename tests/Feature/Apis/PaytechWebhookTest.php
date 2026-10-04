@@ -3,6 +3,7 @@
 use App\Events\BankStatementReceived;
 use App\Events\TransactionParse;
 use App\Models\Transaction;
+use App\Models\TransactionMetadata;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 
@@ -53,8 +54,8 @@ test('paytech webhook dispatches BankStatementReceived with correct data', funct
 
     Event::assertDispatched(
         BankStatementReceived::class,
-        fn ($event) =>
-            $event->body === $rawData &&
+        fn($event) =>
+        $event->body === $rawData &&
             $event->bankName === 'paytech'
     );
 });
@@ -136,7 +137,54 @@ test('paytech webhook dispatches transaction parsing after storing the batch', f
 
     Event::assertDispatched(
         TransactionParse::class,
-        fn ($event) =>
-            Transaction::query()->where('webhook_id', $event->webhookId)->count() === 5
+        fn($event) =>
+        Transaction::query()->where('webhook_id', $event->webhookId)->count() === 5
     );
+});
+
+test("paytech handles metadata correctly", function () {
+    Event::fake([
+        TransactionParse::class,
+    ]);
+
+    $rawData = paytechWebhookData(5);
+
+    $this->call(
+        method: 'POST',
+        uri: PAYTECH_WEBHOOK,
+        parameters: [],
+        cookies: [],
+        files: [],
+        server: ['CONTENT_TYPE' => 'text/plain'],
+        content: $rawData
+    );
+
+    $this->assertDatabaseCount('transactions', 5);
+
+    Event::assertDispatched(TransactionParse::class, function ($event) {
+        $metadata = collect();
+        Transaction::query()->where('webhook_id', $event->webhookId)->get()->each(function ($transaction) use ($metadata) {
+            $metadata->push($transaction->transactionMetadata);
+        });
+
+        return $metadata->count() === 5;
+    });
+});
+
+test("Paytech can handle 1000 transactions in a single webhook request", function () {
+    $rawData = paytechWebhookData(1000);
+
+    $response = $this->call(
+        method: 'POST',
+        uri: PAYTECH_WEBHOOK,
+        parameters: [],
+        cookies: [],
+        files: [],
+        server: ['CONTENT_TYPE' => 'text/plain'],
+        content: $rawData
+    );
+
+    $response->assertNoContent();
+
+    $this->assertDatabaseCount('transactions', 1000);
 });

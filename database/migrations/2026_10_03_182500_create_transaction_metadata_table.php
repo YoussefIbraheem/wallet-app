@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transaction_metadata', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("parsed_transaction_id");
+            $table->foreignId("transaction_id");
             $table->string("key");
             $table->string("value");
         });

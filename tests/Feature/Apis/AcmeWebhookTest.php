@@ -140,3 +140,21 @@ test('acme webhook dispatches transaction parsing after storing the batch', func
         Transaction::where('webhook_id', $event->webhookId)->count() === 5
     );
 });
+
+test("Acme can handle 1000 transactions in a single webhook request", function () {
+    $rawData = acmeWebhookData(1000);
+
+    $response = $this->call(
+        method: 'POST',
+        uri: ACME_WEBHOOK,
+        parameters: [],
+        cookies: [],
+        files: [],
+        server: ['CONTENT_TYPE' => 'text/plain'],
+        content: $rawData
+    );
+
+    $response->assertNoContent();
+
+    $this->assertDatabaseCount('transactions', 1000);
+});

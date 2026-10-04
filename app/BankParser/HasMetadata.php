@@ -6,5 +6,5 @@ use App\Models\ParsedTransaction;
 
 interface HasMetadata
 {
-    public function storeMetadata(ParsedTransaction $transaction, array $parsedData): void;
+    public function parseMetadata($transaction_id, array $parsedData): array;
 }
