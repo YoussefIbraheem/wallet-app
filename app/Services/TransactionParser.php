@@ -8,7 +8,6 @@ use App\BankParser\HasMetadata;
 use App\Enums\TransactionStatus;
 use App\Models\ParsedTransaction;
 use App\Models\Transaction;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TransactionParser
 {
