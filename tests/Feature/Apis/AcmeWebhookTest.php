@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\BankStatementReceived;
+use App\Events\WebhookReceived;
 use App\Events\TransactionParse;
 use App\Models\Transaction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,7 +36,7 @@ test('acme webhook returns 204 for valid request', function () {
     $response->assertNoContent();
 });
 
-test('acme webhook dispatches BankStatementReceived with correct data', function () {
+test('acme webhook dispatches WebhookReceived with correct data', function () {
     Event::fake();
 
     $rawData = acmeWebhookData();
@@ -52,7 +52,7 @@ test('acme webhook dispatches BankStatementReceived with correct data', function
     );
 
     Event::assertDispatched(
-        BankStatementReceived::class,
+        WebhookReceived::class,
         fn($event) =>
         $event->body === $rawData &&
             $event->bankName === 'acme'

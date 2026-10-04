@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\BankStatementReceived;
+use App\Events\WebhookReceived;
 use App\Events\TransactionParse;
 use App\Models\Transaction;
 use App\Models\TransactionMetadata;
@@ -37,7 +37,7 @@ test('paytech webhook returns 204 for valid request', function () {
     $response->assertNoContent();
 });
 
-test('paytech webhook dispatches BankStatementReceived with correct data', function () {
+test('paytech webhook dispatches WebhookReceived with correct data', function () {
     Event::fake();
 
     $rawData = paytechWebhookData();
@@ -53,7 +53,7 @@ test('paytech webhook dispatches BankStatementReceived with correct data', funct
     );
 
     Event::assertDispatched(
-        BankStatementReceived::class,
+        WebhookReceived::class,
         fn($event) =>
         $event->body === $rawData &&
             $event->bankName === 'paytech'

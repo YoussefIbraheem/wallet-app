@@ -4,12 +4,12 @@ namespace App\Listeners;
 
 use App\BankParser\BankParserRegistry;
 use App\Enums\Bank;
-use App\Events\BankStatementReceived;
+use App\Events\WebhookReceived;
 use App\Services\WebhookHandler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class ProcessBankTransaction implements ShouldQueue
+class HandleWebhook implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,7 +22,7 @@ class ProcessBankTransaction implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(BankStatementReceived $event): void
+    public function handle(WebhookReceived $event): void
     {
         $this->handler->execute($event->body, $event->bankName);
     }

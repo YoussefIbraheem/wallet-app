@@ -13,7 +13,7 @@ class WebhookHandler
         //
     }
 
-    public function execute(string $body, string $bankName)
+    public function execute(string $body, string $bankName): void
     {
         $data = $this->convertToArray($body);
         $webhookId = Uuid::uuid4();
@@ -36,8 +36,6 @@ class WebhookHandler
         Transaction::query()->insert($transactions);
 
         TransactionParse::dispatch($webhookId, $bankName);
-
-        return $data;
     }
 
     /**

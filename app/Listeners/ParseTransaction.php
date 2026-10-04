@@ -7,7 +7,7 @@ use App\Events\TransactionParse;
 use App\Services\TransactionParser;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ParseBankTransaction implements ShouldQueue
+class ParseTransaction implements ShouldQueue
 {
     /**
      * Create the event listener.

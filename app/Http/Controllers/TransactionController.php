@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Bank;
-use App\Events\BankStatementReceived;
+use App\Events\WebhookReceived;
 use App\Services\WebhookHandler;
 use Illuminate\Http\Request;
 
@@ -24,7 +24,7 @@ class TransactionController extends Controller
                 throw new \Exception("Empty data received");
             }
 
-            BankStatementReceived::dispatch($body, $bankName);
+            WebhookReceived::dispatch($body, $bankName);
 
             return response()->noContent();
         } catch (\Exception $e) {
