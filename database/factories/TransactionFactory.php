@@ -24,31 +24,38 @@ class TransactionFactory extends Factory
 
     public function bank(string $bankName): static
     {
-        $webhook_id = fake()->uuid();
-        $fakeDate = fake()->date("Ymd");
-        $fakeAmount = fake()->randomFloat(2, 0, 999);
-        $fakeReference = $fakeDate . fake()->randomNumber(7, true);
 
-        $format = match ($bankName) {
-            "paytech" => $fakeDate .
-                $fakeAmount .
-                "#" .
-                $fakeReference .
-                "#" .
-                "note/" .
-                fake()->word() .
-                "/" .
-                strtoupper(fake()->bothify("?###??##")),
-            "acme" => $fakeAmount . "//" . $fakeReference . "//" . $fakeDate,
-        };
 
         return $this->state(
-            fn($attributes) => [
-                "webhook_id" => $webhook_id,
-                "referenece" => $fakeReference,
-                "raw_line" => $format,
-                "raw_line_hashed" => hash("sha256", $format),
-            ],
+            function ($attributes) use ($bankName) {
+
+                $webhookId = fake()->uuid();
+                $fakeDate = fake()->date("Ymd");
+                $fakeAmount = fake()->randomFloat(2, 0, 999);
+                $fakeReference = $fakeDate . fake()->randomNumber(7, true);
+
+                $format = match ($bankName) {
+                    "paytech" => $fakeDate .
+                        $fakeAmount .
+                        "#" .
+                        $fakeReference .
+                        "#" .
+                        "note/" .
+                        fake()->word() .
+                        "/" .
+                        "internal_reference" .
+                        "/" .
+                        strtoupper(fake()->bothify("?###??##")),
+                    "acme" => $fakeAmount . "//" . $fakeReference . "//" . $fakeDate,
+                };
+
+                return [
+                    "webhook_id" => $webhookId,
+                    "referenece" => $fakeReference,
+                    "raw_line" => $format,
+                    "raw_line_hashed" => hash("sha256", $format),
+                ];
+            }
         );
     }
 }
