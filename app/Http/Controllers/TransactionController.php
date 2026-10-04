@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Bank;
 use App\Events\BankStatementReceived;
-use App\Services\BankResponseHandler;
+use App\Services\WebhookHandler;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller

@@ -6,7 +6,7 @@ use App\Events\TransactionParse;
 use App\Models\Transaction;
 use Ramsey\Uuid\Uuid;
 
-class BankResponseHandler
+class WebhookHandler
 {
     public function __construct()
     {
