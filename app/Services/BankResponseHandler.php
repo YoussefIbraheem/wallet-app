@@ -16,7 +16,7 @@ class BankResponseHandler
     public function execute(string $body, string $bankName)
     {
         $data = $this->convertToArray($body);
-        $webhook_id = Uuid::uuid4();
+        $webhookId = Uuid::uuid4();
         foreach ($data as $trans) {
             $rawLineHashed = hash("sha256", $trans);
             if (
@@ -25,14 +25,14 @@ class BankResponseHandler
                 continue;
             }
             Transaction::query()->create([
-                "webhook_id" => $webhook_id,
+                "webhook_id" => $webhookId,
                 "bank_name" => $bankName,
                 "raw_line" => $trans,
                 "raw_line_hashed" => $rawLineHashed,
             ]);
         }
 
-        TransactionParse::dispatch($webhook_id, $bankName);
+        TransactionParse::dispatch($webhookId, $bankName);
 
         return $data;
     }

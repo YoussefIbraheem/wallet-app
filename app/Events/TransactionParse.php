@@ -18,7 +18,7 @@ class TransactionParse
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $webhook_id, public string $bankName)
+    public function __construct(public string $webhookId, public string $bankName)
     {
         //
     }

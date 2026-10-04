@@ -7,7 +7,7 @@ use App\Events\TransactionParse;
 use App\Services\TransactionParser;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ParseBankStatement implements ShouldQueue
+class ParseBankTransaction implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,6 +22,6 @@ class ParseBankStatement implements ShouldQueue
      */
     public function handle(TransactionParse $event): void
     {
-        $this->parser->execute($event->webhook_id, $event->bankName);
+        $this->parser->execute($event->webhookId, $event->bankName);
     }
 }

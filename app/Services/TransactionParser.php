@@ -16,10 +16,10 @@ class TransactionParser
      */
     public function __construct(public BankParserRegistry $registery) {}
 
-    public function execute(string $webhook_id, string $bankName)
+    public function execute(string $webhookId, string $bankName)
     {
         $parser = $this->registery->get($bankName);
-        $transactions = Transaction::query()->where("webhook_id", $webhook_id)->get();
+        $transactions = Transaction::query()->where("webhook_id", $webhookId)->get();
         foreach ($transactions as $transaction) {
             if ($parser instanceof HasMatchingFormat && !$parser->isMatchingFormat($transaction->raw_line)) {
                 $transaction->update(["status" => TransactionStatus::FAILED->value]);

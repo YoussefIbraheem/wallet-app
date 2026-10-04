@@ -9,7 +9,7 @@ use App\Services\BankResponseHandler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class ProcessBankStatement implements ShouldQueue
+class ProcessBankTransaction implements ShouldQueue
 {
     /**
      * Create the event listener.
