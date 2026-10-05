@@ -17,7 +17,7 @@ class PayTech implements BankParser, HasMetadata, HasMatchingFormat
     #[Override]
     public function isMatchingFormat(string $rawLine): bool
     {
-        return (bool) preg_match("/^\d{8}\d+.\d{2}#[^#]+#[^\/#]+\/[^\/#]+(?:\/[^\/#]+\/[^\/#]+)*$/", $rawLine);
+        return (bool) preg_match("/^\d{8}\d+(?:\.\d+)?#[^#]+#[^\/#]+\/[^\/#]+(?:\/[^\/#]+\/[^\/#]+)*$/", $rawLine);
     }
 
     public function parse(string $rawLine): array
