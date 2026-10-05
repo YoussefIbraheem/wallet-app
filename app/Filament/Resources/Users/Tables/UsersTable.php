@@ -86,7 +86,6 @@ class UsersTable
                         ->action(fn($record) => $record->markEmailAsVerified()),
                 ]),
             ])
-            ->recordUrl(false)
             ->toolbarActions([
                 // BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
