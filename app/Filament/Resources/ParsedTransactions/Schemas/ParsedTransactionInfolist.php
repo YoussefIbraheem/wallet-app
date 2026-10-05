@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ParsedTransactions\Schemas;
 
-
 use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;

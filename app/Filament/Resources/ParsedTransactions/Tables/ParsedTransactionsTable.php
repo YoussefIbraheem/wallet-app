@@ -30,7 +30,7 @@ class ParsedTransactionsTable
                 TextColumn::make('transaction.bank_name')
                     ->label('Bank Name')
                     ->sortable()
-                    ->formatStateUsing(fn($state) => strtoupper($state))
+                    ->formatStateUsing(fn ($state) => strtoupper($state))
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

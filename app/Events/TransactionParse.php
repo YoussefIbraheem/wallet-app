@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -30,6 +29,6 @@ class TransactionParse
      */
     public function broadcastOn(): array
     {
-        return [new PrivateChannel("channel-name")];
+        return [new PrivateChannel('channel-name')];
     }
 }

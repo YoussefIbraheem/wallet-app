@@ -12,14 +12,14 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ["admin", "user", "moderator"];
+        $roles = ['admin', 'user', 'moderator'];
 
         foreach ($roles as $role) {
-            $role_exists = Role::query()->where("name", $role)->exists();
+            $role_exists = Role::query()->where('name', $role)->exists();
             if ($role_exists) {
                 continue;
             }
-            Role::create(["name" => $role]);
+            Role::create(['name' => $role]);
         }
     }
 }

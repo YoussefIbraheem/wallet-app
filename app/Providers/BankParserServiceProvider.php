@@ -15,7 +15,7 @@ class BankParserServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(BankParserRegistry::class, function ($app) {
-            $registery = new BankParserRegistry();
+            $registery = new BankParserRegistry;
             $registery->register($app->make(PayTech::class));
             $registery->register($app->make(Acme::class));
 

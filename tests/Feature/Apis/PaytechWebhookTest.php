@@ -1,9 +1,8 @@
 <?php
 
-use App\Events\WebhookReceived;
 use App\Events\TransactionParse;
+use App\Events\WebhookReceived;
 use App\Models\Transaction;
-use App\Models\TransactionMetadata;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 
@@ -54,8 +53,7 @@ test('paytech webhook dispatches WebhookReceived with correct data', function ()
 
     Event::assertDispatched(
         WebhookReceived::class,
-        fn($event) =>
-        $event->body === $rawData &&
+        fn ($event) => $event->body === $rawData &&
             $event->bankName === 'paytech'
     );
 });
@@ -137,12 +135,11 @@ test('paytech webhook dispatches transaction parsing after storing the batch', f
 
     Event::assertDispatched(
         TransactionParse::class,
-        fn($event) =>
-        Transaction::query()->where('webhook_id', $event->webhookId)->count() === 5
+        fn ($event) => Transaction::query()->where('webhook_id', $event->webhookId)->count() === 5
     );
 });
 
-test("paytech handles metadata correctly", function () {
+test('paytech handles metadata correctly', function () {
     Event::fake([
         TransactionParse::class,
     ]);
@@ -171,7 +168,7 @@ test("paytech handles metadata correctly", function () {
     });
 });
 
-test("Paytech can handle 1000 transactions in a single webhook request", function () {
+test('Paytech can handle 1000 transactions in a single webhook request', function () {
     $rawData = paytechWebhookRawData(1000);
 
     $response = $this->call(

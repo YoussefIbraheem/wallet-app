@@ -19,15 +19,15 @@ class WebhookHandler
         $webhookId = Uuid::uuid4();
         $transactions = [];
         foreach ($data as $trans) {
-            $rawLineHashed = hash("sha256", $trans);
-            if (Transaction::where("raw_line_hashed", $rawLineHashed)->exists() ) {
+            $rawLineHashed = hash('sha256', $trans);
+            if (Transaction::where('raw_line_hashed', $rawLineHashed)->exists()) {
                 continue;
             }
             $transactions[$rawLineHashed] = [
-                "webhook_id" => $webhookId,
-                "bank_name" => $bankName,
-                "raw_line" => $trans,
-                "raw_line_hashed" => $rawLineHashed,
+                'webhook_id' => $webhookId,
+                'bank_name' => $bankName,
+                'raw_line' => $trans,
+                'raw_line_hashed' => $rawLineHashed,
             ];
         }
 
@@ -40,10 +40,6 @@ class WebhookHandler
 
     /**
      * convert data to array
-     *
-     * @param string $body
-     * @return array
-     *
      */
     private function convertToArray(string $body): array
     {
@@ -60,14 +56,12 @@ class WebhookHandler
         $uniqueArr = [];
 
         foreach ($transactions as $trans) {
-            $ref = $trans["raw_line_hashed"];
-            if (!array_key_exists($ref, $uniqueArr)) {
+            $ref = $trans['raw_line_hashed'];
+            if (! array_key_exists($ref, $uniqueArr)) {
                 $uniqueArr[$ref] = $trans;
             }
         }
 
         return array_values($uniqueArr);
     }
-
-
 }

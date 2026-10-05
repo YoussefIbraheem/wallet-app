@@ -13,7 +13,7 @@ class BankParserRegistry
 
     public function get(string $bankName): BankParser
     {
-        if (!isset($this->parsers[$bankName])) {
+        if (! isset($this->parsers[$bankName])) {
             throw new \InvalidArgumentException(
                 "Bank parser not found for bank: {$bankName}",
             );

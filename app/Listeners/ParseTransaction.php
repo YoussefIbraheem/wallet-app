@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-
 use App\Events\TransactionParse;
 use App\Services\TransactionParser;
 use Illuminate\Contracts\Queue\ShouldQueue;

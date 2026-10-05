@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('transaction_metadata', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("transaction_id");
-            $table->string("key");
-            $table->string("value");
+            $table->foreignId('transaction_id');
+            $table->string('key');
+            $table->string('value');
         });
     }
 

@@ -12,7 +12,7 @@ class TransactionInfolist
     {
         return $schema
             ->components([
-                Section::make("")
+                Section::make('')
                     ->schema([
                         TextEntry::make('webhook_id'),
                         TextEntry::make('raw_line'),
@@ -22,7 +22,7 @@ class TransactionInfolist
                     ->columns(1),
 
                 TextEntry::make('bank_name')
-                    ->formatStateUsing(fn(string $state) => strtoupper($state)),
+                    ->formatStateUsing(fn (string $state) => strtoupper($state)),
                 TextEntry::make('status'),
                 TextEntry::make('created_at')
                     ->dateTime()

@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $this->call(RoleSeeder::class);
         $admin = User::factory()->create([
-            "first_name" => "admin",
-            "email" => "admin@admin.com",
+            'first_name' => 'admin',
+            'email' => 'admin@admin.com',
         ]);
         $admin->assignRole('admin');
     }

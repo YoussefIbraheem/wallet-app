@@ -1,7 +1,7 @@
 <?php
 
-use App\Events\WebhookReceived;
 use App\Events\TransactionParse;
+use App\Events\WebhookReceived;
 use App\Models\Transaction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
@@ -53,8 +53,7 @@ test('acme webhook dispatches WebhookReceived with correct data', function () {
 
     Event::assertDispatched(
         WebhookReceived::class,
-        fn($event) =>
-        $event->body === $rawData &&
+        fn ($event) => $event->body === $rawData &&
             $event->bankName === 'acme'
     );
 });
@@ -136,12 +135,11 @@ test('acme webhook dispatches transaction parsing after storing the batch', func
 
     Event::assertDispatched(
         TransactionParse::class,
-        fn($event) =>
-        Transaction::where('webhook_id', $event->webhookId)->count() === 5
+        fn ($event) => Transaction::where('webhook_id', $event->webhookId)->count() === 5
     );
 });
 
-test("Acme can handle 1000 transactions in a single webhook request", function () {
+test('Acme can handle 1000 transactions in a single webhook request', function () {
     $rawData = acmeWebhookData(1000);
 
     $response = $this->call(

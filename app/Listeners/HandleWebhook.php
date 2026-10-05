@@ -2,12 +2,9 @@
 
 namespace App\Listeners;
 
-use App\BankParser\BankParserRegistry;
-use App\Enums\Bank;
 use App\Events\WebhookReceived;
 use App\Services\WebhookHandler;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class HandleWebhook implements ShouldQueue
 {

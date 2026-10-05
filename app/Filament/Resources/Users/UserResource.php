@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Users;
 
-use App\Enums\Role;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
@@ -23,7 +22,7 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = "Users";
+    protected static ?string $recordTitleAttribute = 'Users';
 
     public static function form(Schema $schema): Schema
     {
@@ -45,9 +44,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            "index" => ListUsers::route("/"),
-            "create" => CreateUser::route("/create"),
-            "edit" => EditUser::route("/{record}/edit"),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 

@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Contracts\Role as ContractsRole;
-use Spatie\Permission\Models\Role as ModelsRole;
 
 class UserSeeder extends Seeder
 {
@@ -15,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->create()->each(fn($user)=>$user->assignRole(Role::MODERATOR));
-        \App\Models\User::factory(20)->create()->each(fn($user)=>$user->assignRole(Role::USER));
+        User::factory(10)->create()->each(fn ($user) => $user->assignRole(Role::MODERATOR));
+        User::factory(20)->create()->each(fn ($user) => $user->assignRole(Role::USER));
     }
 }

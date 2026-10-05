@@ -21,37 +21,36 @@ class TransactionParser
     public function execute(string $webhookId, string $bankName)
     {
         $parser = $this->registery->get($bankName);
-        $transactions = Transaction::query()->where("webhook_id", $webhookId)->get();
+        $transactions = Transaction::query()->where('webhook_id', $webhookId)->get();
         $parsedTransactions = [];
         $metadata = [];
         foreach ($transactions as $transaction) {
-            if ($parser instanceof HasMatchingFormat && !$parser->isMatchingFormat($transaction->raw_line)) {
+            if ($parser instanceof HasMatchingFormat && ! $parser->isMatchingFormat($transaction->raw_line)) {
                 $transaction->status = TransactionStatus::FAILED->value;
+
                 continue;
             }
             $parsedTransaction = $parser->parse($transaction->raw_line);
             $parsedTransactions[] = [
-                "date" => $parsedTransaction["date"],
-                "amount" => $parsedTransaction["amount"],
-                "reference" => $parsedTransaction["reference"],
-                "transaction_id" => $transaction->id,
+                'date' => $parsedTransaction['date'],
+                'amount' => $parsedTransaction['amount'],
+                'reference' => $parsedTransaction['reference'],
+                'transaction_id' => $transaction->id,
             ];
             if ($parser instanceof HasMetadata) {
                 $metadata[] = $parser->parseMetadata($transaction->id, $parsedTransaction);
             }
         }
 
+        ParsedTransaction::query()->insert($parsedTransactions);
+        if ($parser instanceof HasMetadata) {
+            $metadata = array_merge(...$metadata);
+            TransactionMetadata::query()->insert($metadata);
+        }
 
+        $transactions = $transactions->toArray();
 
-            ParsedTransaction::query()->insert($parsedTransactions);
-            if ($parser instanceof HasMetadata) {
-                $metadata = array_merge(...$metadata);
-                TransactionMetadata::query()->insert($metadata);
-            }
-
-            $transactions = $transactions->toArray();
-
-            DB::table("transactions")->upsert($transactions, ["id"], ["status"]);
+        DB::table('transactions')->upsert($transactions, ['id'], ['status']);
 
     }
 }

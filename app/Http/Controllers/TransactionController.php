@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\Bank;
 use App\Events\WebhookReceived;
-use App\Services\WebhookHandler;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -12,7 +11,6 @@ class TransactionController extends Controller
     /**
      * Process bank transaction response.
      *
-     * @param Request $request
      * @return mixed
      */
     public function handleBankWebhook(Request $request, string $bankName)
@@ -21,14 +19,14 @@ class TransactionController extends Controller
             $body = $request->getContent();
 
             if (empty($body)) {
-                throw new \Exception("Empty data received");
+                throw new \Exception('Empty data received');
             }
 
             WebhookReceived::dispatch($body, $bankName);
 
             return response()->noContent();
         } catch (\Exception $e) {
-            return response()->json(["error" => "Invalid request " . $e], 400);
+            return response()->json(['error' => 'Invalid request '.$e], 400);
         }
     }
 }

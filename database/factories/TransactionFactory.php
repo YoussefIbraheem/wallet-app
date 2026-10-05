@@ -23,32 +23,33 @@ class TransactionFactory extends Factory
     public function bank(string $bankName): static
     {
         $webhookId = fake()->uuid();
+
         return $this->state(
             function ($attributes) use ($bankName, $webhookId) {
-                $fakeDate = fake()->date("Ymd");
+                $fakeDate = fake()->date('Ymd');
                 $fakeAmount = fake()->randomFloat(2, 0, 999);
-                $fakeReference = $fakeDate . fake()->randomNumber(7, true);
+                $fakeReference = $fakeDate.fake()->randomNumber(7, true);
 
                 $format = match ($bankName) {
-                    "paytech" => $fakeDate .
-                        $fakeAmount .
-                        "#" .
-                        $fakeReference .
-                        "#" .
-                        "note/" .
-                        fake()->word() .
-                        "/" .
-                        "internal_reference" .
-                        "/" .
-                        strtoupper(fake()->bothify("?###??##")),
-                    "acme" => $fakeAmount . "//" . $fakeReference . "//" . $fakeDate,
+                    'paytech' => $fakeDate.
+                        $fakeAmount.
+                        '#'.
+                        $fakeReference.
+                        '#'.
+                        'note/'.
+                        fake()->word().
+                        '/'.
+                        'internal_reference'.
+                        '/'.
+                        strtoupper(fake()->bothify('?###??##')),
+                    'acme' => $fakeAmount.'//'.$fakeReference.'//'.$fakeDate,
                 };
 
                 return [
-                    "webhook_id" => $webhookId,
-                    "raw_line" => $format,
-                    "bank_name" => $bankName,
-                    "raw_line_hashed" => hash("sha256", $format),
+                    'webhook_id' => $webhookId,
+                    'raw_line' => $format,
+                    'bank_name' => $bankName,
+                    'raw_line_hashed' => hash('sha256', $format),
                 ];
             }
         );

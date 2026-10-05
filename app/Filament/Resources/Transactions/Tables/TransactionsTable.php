@@ -20,13 +20,13 @@ class TransactionsTable
                 TextColumn::make('bank_name')
                     ->sortable()
                     ->searchable()
-                    ->formatStateUsing(fn(string $state) => strtoupper($state)),
+                    ->formatStateUsing(fn (string $state) => strtoupper($state)),
                 TextColumn::make('raw_line')
                     ->limit(8)
                     ->searchable(),
                 TextColumn::make('status')
                     ->badge()
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         TransactionStatus::PENDING->value => 'warning',
                         TransactionStatus::PROCESSED->value => 'info',
                         TransactionStatus::FAILED->value => 'danger',
