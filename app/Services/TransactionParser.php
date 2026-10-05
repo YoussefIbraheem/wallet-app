@@ -41,19 +41,17 @@ class TransactionParser
             }
         }
 
-        $isParsed = ParsedTransaction::query()->insert($parsedTransactions);
-        if ($parser instanceof HasMetadata) {
-            $metadata = array_merge(...$metadata);
-            TransactionMetadata::query()->insert($metadata);
-        }
 
-        if ($isParsed) {
-            $transactions = Transaction::query()->where("webhook_id", $webhookId)->get()->each(function ($transaction) {
-                $transaction->status = TransactionStatus::PROCESSED->value;
-            })->toArray();
 
-            DB::table("transactions")->upsert($transactions, ["id"],["status"]);
+            ParsedTransaction::query()->insert($parsedTransactions);
+            if ($parser instanceof HasMetadata) {
+                $metadata = array_merge(...$metadata);
+                TransactionMetadata::query()->insert($metadata);
+            }
 
-        }
+            $transactions = $transactions->toArray();
+
+            DB::table("transactions")->upsert($transactions, ["id"], ["status"]);
+
     }
 }

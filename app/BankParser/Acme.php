@@ -28,7 +28,7 @@ class Acme implements BankParser, HasMatchingFormat
     #[Override]
     public function isMatchingFormat(string $rawLine): bool
     {
-        return preg_match("/^\d+,\d{2}\/\/[^\/]+\/\/\d{8}$/", $rawLine);
+        return preg_match("/^\d+.\d{2}\/\/[^\/]+\/\/\d{8}$/", $rawLine);
     }
 
     private function extractAmount(string $amount): float

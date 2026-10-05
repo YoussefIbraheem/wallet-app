@@ -17,19 +17,14 @@ class TransactionFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            "transaction" => "",
-        ];
+        return [];
     }
 
     public function bank(string $bankName): static
     {
-
-
+        $webhookId = fake()->uuid();
         return $this->state(
-            function ($attributes) use ($bankName) {
-
-                $webhookId = fake()->uuid();
+            function ($attributes) use ($bankName, $webhookId) {
                 $fakeDate = fake()->date("Ymd");
                 $fakeAmount = fake()->randomFloat(2, 0, 999);
                 $fakeReference = $fakeDate . fake()->randomNumber(7, true);
@@ -51,8 +46,8 @@ class TransactionFactory extends Factory
 
                 return [
                     "webhook_id" => $webhookId,
-                    "referenece" => $fakeReference,
                     "raw_line" => $format,
+                    "bank_name" => $bankName,
                     "raw_line_hashed" => hash("sha256", $format),
                 ];
             }
