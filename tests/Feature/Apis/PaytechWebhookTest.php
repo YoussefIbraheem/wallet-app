@@ -11,7 +11,7 @@ uses(RefreshDatabase::class);
 
 const PAYTECH_WEBHOOK = '/api/webhook/paytech/payment';
 
-function paytechWebhookData(int $count = 5): string
+function paytechWebhookRawData(int $count = 5): string
 {
     return Transaction::factory()
         ->bank('paytech')
@@ -22,7 +22,7 @@ function paytechWebhookData(int $count = 5): string
 }
 
 test('paytech webhook returns 204 for valid request', function () {
-    $rawData = paytechWebhookData();
+    $rawData = paytechWebhookRawData();
 
     $response = $this->call(
         method: 'POST',
@@ -40,7 +40,7 @@ test('paytech webhook returns 204 for valid request', function () {
 test('paytech webhook dispatches WebhookReceived with correct data', function () {
     Event::fake();
 
-    $rawData = paytechWebhookData();
+    $rawData = paytechWebhookRawData();
 
     $this->call(
         method: 'POST',
@@ -77,7 +77,7 @@ test('paytech webhook returns 400 when request body is empty', function () {
 });
 
 test('paytech webhook stores all unique transactions', function () {
-    $rawData = paytechWebhookData(5);
+    $rawData = paytechWebhookRawData(5);
 
     $this->call(
         method: 'POST',
@@ -121,7 +121,7 @@ test('paytech webhook dispatches transaction parsing after storing the batch', f
         TransactionParse::class,
     ]);
 
-    $rawData = paytechWebhookData(5);
+    $rawData = paytechWebhookRawData(5);
 
     $this->call(
         method: 'POST',
@@ -147,7 +147,7 @@ test("paytech handles metadata correctly", function () {
         TransactionParse::class,
     ]);
 
-    $rawData = paytechWebhookData(5);
+    $rawData = paytechWebhookRawData(5);
 
     $this->call(
         method: 'POST',
@@ -172,7 +172,7 @@ test("paytech handles metadata correctly", function () {
 });
 
 test("Paytech can handle 1000 transactions in a single webhook request", function () {
-    $rawData = paytechWebhookData(1000);
+    $rawData = paytechWebhookRawData(1000);
 
     $response = $this->call(
         method: 'POST',
