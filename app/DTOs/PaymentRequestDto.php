@@ -2,8 +2,6 @@
 
 namespace App\DTOs;
 
-use DateTimeInterface;
-
 final readonly class PaymentRequestDto
 {
     /**

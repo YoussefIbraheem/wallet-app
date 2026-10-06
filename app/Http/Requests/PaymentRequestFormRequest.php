@@ -23,18 +23,18 @@ class PaymentRequestFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "reference" => ["string", "required", "uuid"],
-            "amount" => ["numeric", "required"],
-            "date" => ["date", "required"],
-            "currency" => ["string", "required"],
-            "sender_account_number" => ["string", "required"],
-            "bank_code" => ["string", "required"],
-            "receiver_account_number" => ["string", "required"],
-            "beneficiary_name" => ["string", "required"],
-            "notes" => ["array", "nullable"],
-            "notes.*" => ["string"],
-            "payment_type" => ["string", "required"],
-            "charge_details" => ["string", "required"],
+            'reference' => ['string', 'required', 'uuid'],
+            'amount' => ['numeric', 'required'],
+            'date' => ['date', 'required'],
+            'currency' => ['string', 'required'],
+            'sender_account_number' => ['string', 'required'],
+            'bank_code' => ['string', 'required'],
+            'receiver_account_number' => ['string', 'required'],
+            'beneficiary_name' => ['string', 'required'],
+            'notes' => ['array', 'nullable'],
+            'notes.*' => ['string'],
+            'payment_type' => ['string', 'required'],
+            'charge_details' => ['string', 'required'],
         ];
     }
 }

@@ -2,11 +2,9 @@
 
 use App\Services\PaymentRequestXmlGenerator;
 
-
 beforeEach(function () {
-    $this->generator = new PaymentRequestXmlGenerator();
+    $this->generator = new PaymentRequestXmlGenerator;
 });
-
 
 it('includes all required elements', function () {
     $request = paymentRequest([

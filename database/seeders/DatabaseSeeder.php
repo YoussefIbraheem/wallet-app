@@ -17,13 +17,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $this->call(RoleSeeder::class);
-        $adminExists = User::where("email","admin@admin.com")->first();
-        if (!$adminExists) {
-        $admin = User::factory()->create([
-            'first_name' => 'admin',
-            'email' => 'admin@admin.com',
-        ]);
-        $admin->assignRole('admin');
+        $adminExists = User::where('email', 'admin@admin.com')->first();
+        if (! $adminExists) {
+            $admin = User::factory()->create([
+                'first_name' => 'admin',
+                'email' => 'admin@admin.com',
+            ]);
+            $admin->assignRole('admin');
         }
     }
 }

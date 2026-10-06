@@ -17,9 +17,9 @@ class PaymentRequestXmlGenerator
 
         $xw = xmlwriter_open_memory();
 
-        xmlwriter_start_document($xw, "1.0", "UTF-8");
+        xmlwriter_start_document($xw, '1.0', 'UTF-8');
 
-        xmlwriter_start_element($xw, "PaymentRequestMessage");
+        xmlwriter_start_element($xw, 'PaymentRequestMessage');
         $this->TransferInfo($xw, $data);
         $this->senderInfo($xw, $data);
         $this->receiverInfo($xw, $data);
@@ -40,21 +40,21 @@ class PaymentRequestXmlGenerator
         $amount = $data->amount;
         $currency = $data->currency;
 
-        xmlwriter_start_element($xml, "TransferInfo");
+        xmlwriter_start_element($xml, 'TransferInfo');
 
-        xmlwriter_start_element($xml, "Reference");
+        xmlwriter_start_element($xml, 'Reference');
         xmlwriter_text($xml, $reference);
         xmlwriter_end_element($xml);
 
-        xmlwriter_start_element($xml, "Date");
+        xmlwriter_start_element($xml, 'Date');
         xmlwriter_text($xml, $date);
         xmlwriter_end_element($xml);
 
-        xmlwriter_start_element($xml, "Amount");
+        xmlwriter_start_element($xml, 'Amount');
         xmlwriter_text($xml, $amount);
         xmlwriter_end_element($xml);
 
-        xmlwriter_start_element($xml, "Currency");
+        xmlwriter_start_element($xml, 'Currency');
         xmlwriter_text($xml, $currency);
         xmlwriter_end_element($xml);
 
@@ -65,9 +65,9 @@ class PaymentRequestXmlGenerator
     {
         $senderAccountNumber = $data->senderAccountNumber;
 
-        xmlwriter_start_element($xml, "SenderInfo");
+        xmlwriter_start_element($xml, 'SenderInfo');
 
-        xmlwriter_start_element($xml, "AccountNumber");
+        xmlwriter_start_element($xml, 'AccountNumber');
         xmlwriter_text($xml, $senderAccountNumber);
         xmlwriter_end_element($xml);
 
@@ -80,17 +80,17 @@ class PaymentRequestXmlGenerator
         $accountNumber = $data->receiverAccountNumber;
         $beneficiary = $data->beneficiaryName;
 
-        xmlwriter_start_element($xml, "ReceiverInfo");
+        xmlwriter_start_element($xml, 'ReceiverInfo');
 
-        xmlwriter_start_element($xml, "BankCode");
+        xmlwriter_start_element($xml, 'BankCode');
         xmlwriter_text($xml, $bankCode);
         xmlwriter_end_element($xml);
 
-        xmlwriter_start_element($xml, "AccountNumber");
+        xmlwriter_start_element($xml, 'AccountNumber');
         xmlwriter_text($xml, $accountNumber);
         xmlwriter_end_element($xml);
 
-        xmlwriter_start_element($xml, "BeneficiaryName");
+        xmlwriter_start_element($xml, 'BeneficiaryName');
         xmlwriter_text($xml, $beneficiary);
         xmlwriter_end_element($xml);
 
@@ -105,9 +105,9 @@ class PaymentRequestXmlGenerator
             return;
         }
 
-        xmlwriter_start_element($xml, "Notes");
+        xmlwriter_start_element($xml, 'Notes');
         foreach ($notes as $note) {
-            xmlwriter_start_element($xml, "Note");
+            xmlwriter_start_element($xml, 'Note');
             xmlwriter_text($xml, $note);
             xmlwriter_end_element($xml);
         }
@@ -122,7 +122,7 @@ class PaymentRequestXmlGenerator
             return;
         }
 
-        xmlwriter_start_element($xml, "PaymentType");
+        xmlwriter_start_element($xml, 'PaymentType');
         xmlwriter_text($xml, $paymentType);
         xmlwriter_end_element($xml);
     }
@@ -131,11 +131,11 @@ class PaymentRequestXmlGenerator
     {
         $chargeDetails = $data->chargeDetails;
 
-        if ($chargeDetails == "SHA") {
+        if ($chargeDetails == 'SHA') {
             return;
         }
 
-        xmlwriter_start_element($xml, "ChargeDetails");
+        xmlwriter_start_element($xml, 'ChargeDetails');
         xmlwriter_text($xml, $chargeDetails);
         xmlwriter_end_element($xml);
     }

@@ -4,9 +4,8 @@ use App\Services\PaymentRequestXmlGenerator;
 use Database\Factories\PaymentRequestFactory;
 
 beforeEach(function () {
-    $this->generator = new PaymentRequestXmlGenerator();
+    $this->generator = new PaymentRequestXmlGenerator;
 });
-
 
 it('generates payment request xml', function () {
     $data = (new PaymentRequestFactory)->make([
@@ -27,7 +26,7 @@ it('generates payment request xml', function () {
         'notes' => $data['notes'],
         'payment_type' => $data['paymentType'],
         'charge_details' => $data['chargeDetails'],
-    ],headers:["Accept"=>"application/xml"]);
+    ], headers: ['Accept' => 'application/xml']);
 
     $response
         ->assertOk()
@@ -49,7 +48,7 @@ it('omits optional elements according to their default values', function () {
         'chargeDetails' => 'SHA',
     ]);
 
-    $response = $this->postJson('/api/payment',[
+    $response = $this->postJson('/api/payment', [
         'reference' => $data['reference'],
         'date' => $data['date'],
         'amount' => $data['amount'],

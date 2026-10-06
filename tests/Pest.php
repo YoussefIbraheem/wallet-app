@@ -54,7 +54,6 @@ function something()
 const PAYTECH = 'paytech';
 const ACME = 'acme';
 
-
 function paymentRequest(array $overrides = []): PaymentRequestDto
 {
     $data = (new PaymentRequestFactory)->make($overrides);
