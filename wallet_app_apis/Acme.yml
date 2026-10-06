@@ -1,0 +1,32 @@
+info:
+  name: Acme
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{localhost}}/webhook/acme/payment"
+  headers:
+    - name: Cookie
+      value: XDEBUG_SESSION=VSCODE
+  body:
+    type: text
+    data: |-
+      250,75//202610031234567//20261003
+      99,50//202610039876543//20261003
+      1250,00//202610034567890//20261003
+      45,25//202610031112223//20261003
+      780,00//202610035556667//20261003
+      99,50//202610039876543//20261003
+      320,40//202610038889990//20261003
+      1250,00//202610034567890//20261003
+      15,99//202610037771112//20261003
+      5000,00//202610034444555//20261003
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

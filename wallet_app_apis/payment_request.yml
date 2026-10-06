@@ -1,0 +1,38 @@
+info:
+  name: payment_request
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{localhost}}/payment"
+  headers:
+    - name: Accept
+      value: application/xml
+  body:
+    type: json
+    data: |-
+      {
+        "reference": "e0f4763d-28ea-42d4-ac1c-c4013c242105",
+        "date": "2025-02-25 06:33:00+03",
+        "amount": "177.39",
+        "currency": "SAR",
+        "sender_account_number": "SA6980000204608016212908",
+        "bank_code": "FDCSSARI",
+        "receiver_account_number": "SA6980000204608016211111",
+        "beneficiary_name": "Jane Doe",
+        "notes": [
+          "Lorem Epsum",
+          "Dolor Sit Amet"
+        ],
+        "payment_type": "421",
+        "charge_details": "RB"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

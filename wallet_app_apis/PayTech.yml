@@ -1,0 +1,32 @@
+info:
+  name: PayTech
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{localhost}}/webhook/paytech/payment"
+  headers:
+    - name: Cookie
+      value: XDEBUG_SESSION=VSCODE
+  body:
+    type: text
+    data: |-
+      20250615156,50#202506159000001#note/debt payment march/internal_reference/A462JE81
+      20250615250,75#202506159000002#note/grocery payment/internal_reference/B731KF92
+      2025061689,99#202506159000003#note/online subscription/internal_reference/C845LM37
+      202506161200,00#202506159000004#note/rent payment/internal_reference/D219PQ64
+      2025061775,50#202506159000005#note/transportation/internal_reference/E563RS18
+      20250615250,75#202506159000002#note/grocery payment/internal_reference/B731KF92
+      2025061689,99#202506159000003#note/online subscription/internal_reference/C845LM37
+      20250617430,25#202506159000006#note/utility bill/internal_reference/F927TU45
+      20250618999,99#202506159000007#note/electronics purchase/internal_reference/G314VW76
+      2025061845,00#202506159000008#note/coffee shop/internal_reference/H682XY53
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
