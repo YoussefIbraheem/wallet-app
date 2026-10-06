@@ -8,7 +8,7 @@ http:
   url: "{{localhost}}/payment"
   headers:
     - name: Accept
-      value: application/xml
+      value: application/json
   body:
     type: json
     data: |-
