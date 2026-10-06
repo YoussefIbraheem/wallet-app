@@ -32,6 +32,7 @@ class PaymentRequestController extends Controller
 
         $xmlData = (new PaymentRequestXmlGenerator())->execute($data);
 
-        return $xmlData;
+        return response($xmlData, 200)
+            ->header('Content-Type', 'application/xml');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\DTOs\PaymentRequestDto;
+use Database\Factories\PaymentRequestFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -51,3 +53,11 @@ function something()
 
 const PAYTECH = 'paytech';
 const ACME = 'acme';
+
+
+function paymentRequest(array $overrides = []): PaymentRequestDto
+{
+    $data = (new PaymentRequestFactory)->make($overrides);
+
+    return new PaymentRequestDto(...$data);
+}
