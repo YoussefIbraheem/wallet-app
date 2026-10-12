@@ -24,7 +24,7 @@ class PaymentRequestFormRequest extends FormRequest
     {
         return [
             'reference' => ['string', 'required', 'uuid'],
-            'amount' => ['numeric', 'required'],
+            'amount' => ['numeric', 'decimal:1,2', 'required'],
             'date' => ['date', 'required'],
             'currency' => ['string', 'required'],
             'sender_account_number' => ['string', 'required'],
